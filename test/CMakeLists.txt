@@ -1406,6 +1406,7 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(node)
+add_subdirectory(type)
 
 if(PYTHON)
   add_subdirectory(python)
