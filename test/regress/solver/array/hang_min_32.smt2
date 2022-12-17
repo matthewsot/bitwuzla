@@ -1,4 +1,5 @@
 (set-option :produce-models true)
+(set-info :status sat)
 (set-logic QF_ABV)
 
 (declare-fun |UNROLL#30| () (_ BitVec 1))
