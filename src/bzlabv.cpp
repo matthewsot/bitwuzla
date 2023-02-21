@@ -268,7 +268,7 @@ bzla_bv_to_char(BzlaMemMgr *mm, const BzlaBitVector *bv)
   assert(mm);
   assert(bv);
 
-  std::string s = bv->d_bv->to_string();
+  std::string s = bv->d_bv->str();
   return bzla_mem_strdup(mm, s.c_str());
 }
 
@@ -278,7 +278,7 @@ bzla_bv_to_hex_char(BzlaMemMgr *mm, const BzlaBitVector *bv)
   assert(mm);
   assert(bv);
 
-  std::string s = bv->d_bv->to_string(16);
+  std::string s = bv->d_bv->str(16);
   return bzla_mem_strdup(mm, s.c_str());
 }
 
@@ -288,7 +288,7 @@ bzla_bv_to_dec_char(BzlaMemMgr *mm, const BzlaBitVector *bv)
   assert(mm);
   assert(bv);
 
-  std::string s = bv->d_bv->to_string(10);
+  std::string s = bv->d_bv->str(10);
   return bzla_mem_strdup(mm, s.c_str());
 }
 

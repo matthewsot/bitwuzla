@@ -502,7 +502,7 @@ PropSolverState::generate_model()
     assert(iit != d_node_map.end());
     const BitVector &assignment         = d_ls->get_assignment(iit->second);
     BzlaBitVector *bv_assignment        = bzla_bv_const(
-        d_bzla->mm, assignment.to_string().c_str(), assignment.size());
+        d_bzla->mm, assignment.str().c_str(), assignment.size());
     bzla_model_add_to_bv(d_bzla, d_bzla->bv_model, leaf, bv_assignment);
     bzla_bv_free(d_bzla->mm, bv_assignment);
   }
