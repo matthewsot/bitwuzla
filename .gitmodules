@@ -1,4 +1,4 @@
 [submodule "lib/bzla-libs"]
-	path = lib/bzla-libs
+	path = subprojects/bitwuzla-libs
 	url = git@github.com:bitwuzla/bzla-libs.git
 	branch = main
