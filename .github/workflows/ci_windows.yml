@@ -1,0 +1,40 @@
+name: CI (Windows)
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        name: [release]
+
+    name: ${{ matrix.os }}:${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install Packages
+        run: pip install meson ninja
+
+      - name: Prepare MSVC
+        uses: bus1/cabuild/action/msdevshell@v1
+        with:
+          architecture: x64
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.BZLA_LIBS_KEY }}
+          submodules: 'recursive'
+
+      - name: Configure
+        run: ${{ matrix.env }} meson setup build/ ${{ matrix.config }}
+
+      - name: Build
+        run: ninja
+        working-directory: build
+
+      - name: Test
+        run: meson test --print-errorlogs
+        working-directory: build
+
