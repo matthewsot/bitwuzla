@@ -13,13 +13,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Install Packages
-        run: pip install meson ninja
-
       - name: Prepare MSVC
         uses: bus1/cabuild/action/msdevshell@v1
         with:
           architecture: x64
+
+      - name: Install Packages
+        run: |
+          pip install meson ninja
+          vcpkg install gmp --triplet=x64-windows-static
 
       - name: Checkout
         uses: actions/checkout@v3
