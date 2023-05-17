@@ -333,9 +333,10 @@ LocalSearch<VALUE>::select_move(Node<VALUE>* root, const VALUE& t_root)
        *    conflict
        */
 
+      bool is_invertible = false;
       if ((all_but_one_const
            || d_rng->pick_with_prob(d_options.prob_pick_inv_value))
-          && cur->is_invertible(t, pos_x))
+          && (is_invertible = cur->is_invertible(t, pos_x)))
       {
         t = cur->inverse_value(t, pos_x);
         BZLALSLOG(1) << "    -> inverse value: " << t << std::endl;
@@ -343,6 +344,11 @@ LocalSearch<VALUE>::select_move(Node<VALUE>* root, const VALUE& t_root)
 #ifndef NDEBUG
         d_statistics.d_ninv[cur->kind()] += 1;
 #endif
+      }
+      else if (all_but_one_const && !is_invertible)
+      {
+        goto CONFLICT;
+        // TODO: in the future, this is a case where we want to backtrack
       }
       else if (cur->is_consistent(t, pos_x))
       {
@@ -355,6 +361,7 @@ LocalSearch<VALUE>::select_move(Node<VALUE>* root, const VALUE& t_root)
       }
       else
       {
+      CONFLICT:
 #ifndef NDEBUG
         d_statistics.d_nconf[cur->kind()] += 1;
 #endif
@@ -370,9 +377,8 @@ LocalSearch<VALUE>::select_move(Node<VALUE>* root, const VALUE& t_root)
     }
   }
 
-  BZLALSLOG(1) << "*** conflict" << std::endl;
-
   /* Conflict case */
+  BZLALSLOG(1) << "*** conflict" << std::endl;
   return LocalSearchMove<VALUE>(nprops, nupdates, nullptr, VALUE());
 }
 
