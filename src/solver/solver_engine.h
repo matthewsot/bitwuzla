@@ -75,6 +75,10 @@ class SolverEngine
   /** Ensure that we have model values for given terms. */
   void ensure_model(const std::vector<Node>& terms);
 
+ protected:
+  /** Traverse term and register terms to corresponding solvers. */
+  void process_term(const Node& term);
+
  private:
   /** Synchronize d_backtrack_mgr up to given level. */
   void sync_scope(size_t level);
@@ -89,9 +93,6 @@ class SolverEngine
    * solvers.
    */
   void process_assertion(const Node& assertion, bool top_level, bool is_lemma);
-
-  /** Traverse term and register terms to corresponding solvers. */
-  void process_term(const Node& term);
 
   /** Returns true if term was registered to the corresponding theory solver. */
   bool registered(const Node& term) const;

@@ -43,6 +43,29 @@ SolvingContext::solve()
   check_no_free_variables();
 #endif
   preprocess();
+
+  // Very rough: get all variables, preprocess them, and register the resulting
+  // terms with the solver.
+  std::unordered_set<Node> cache;
+  std::vector<Node> visit, terms;
+  for (const Node& assertion : original_assertions())
+  {
+    visit.push_back(assertion);
+    do
+    {
+      Node cur = visit.back();
+      visit.pop_back();
+      if (cache.insert(cur).second)
+      {
+        if (cur.is_const())
+        {
+          d_solver_engine.process_term(d_preprocessor.process(cur));
+        }
+        visit.insert(visit.end(), cur.begin(), cur.end());
+      }
+    } while (!visit.empty());
+  }
+
   d_sat_state = d_solver_engine.solve();
 
   if (d_sat_state == Result::SAT
